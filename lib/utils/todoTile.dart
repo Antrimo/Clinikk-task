@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-class TodoTile extends StatefulWidget {
-  final Function()? onDelete;
+class TodoTile extends StatelessWidget {
+  final String title;
+  final bool isChecked;
+  final ValueChanged<bool?>? onChanged;
+  final VoidCallback? onDelete;
 
-  const TodoTile({super.key, this.onDelete});
-
-  @override
-  State<TodoTile> createState() => _TodoTileState();
-}
-
-class _TodoTileState extends State<TodoTile> {
-  bool isChecked = false;
+  const TodoTile({
+    super.key,
+    required this.title,
+    required this.isChecked,
+    this.onChanged,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +30,13 @@ class _TodoTileState extends State<TodoTile> {
             Row(
               children: [
                 const SizedBox(width: 20),
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value ?? false;
-                    });
-                  },
-                ),
+                Checkbox(value: isChecked, onChanged: onChanged),
                 const SizedBox(width: 20),
                 Text(
-                  "Task Title",
+                  title,
                   style: TextStyle(
-                    decoration: isChecked
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
+                    decoration:
+                    isChecked ? TextDecoration.lineThrough : TextDecoration.none,
                     fontSize: 16,
                     color: isChecked ? Colors.grey : Colors.black,
                   ),
@@ -51,7 +45,7 @@ class _TodoTileState extends State<TodoTile> {
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: widget.onDelete,
+              onPressed: onDelete,
             ),
           ],
         ),
