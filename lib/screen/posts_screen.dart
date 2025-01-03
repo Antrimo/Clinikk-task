@@ -42,7 +42,8 @@ class _PostsScreenState extends State<PostsScreen> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    decoration: const InputDecoration(labelText: 'Filter by User ID'),
+                    decoration:
+                        const InputDecoration(labelText: 'Filter by User ID'),
                     keyboardType: TextInputType.number,
                   ),
                 ),

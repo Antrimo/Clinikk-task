@@ -3,14 +3,14 @@ import 'package:lottie/lottie.dart';
 import 'package:task/utils/dialogBox.dart';
 import 'package:task/utils/todoTile.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class TodoScreen extends StatefulWidget {
+  const TodoScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TodoScreen> createState() => _TodoScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TodoScreenState extends State<TodoScreen> {
   final List<Map<String, dynamic>> tasks = [];
 
   void addNewTask(String taskTitle) {
@@ -49,27 +49,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "Todo App",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.green,
-      ),
       body: tasks.isEmpty
           ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Add a new task to get started",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),),
-              Center(child: Lottie.asset('assets/task1.json',fit: BoxFit.fill,)),
-            ],
-          )
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Add a new task to get started",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
+                Center(
+                    child: Lottie.asset(
+                  'assets/task1.json',
+                  fit: BoxFit.fill,
+                )),
+              ],
+            )
           : ListView.builder(
               itemCount: tasks.length,
               itemBuilder: (context, index) {
@@ -82,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDelete: () => deleteTask(index),
                 );
               },
-      ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: newTask,
         child: const Icon(Icons.add),
