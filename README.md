@@ -1,16 +1,35 @@
-# task
 
-A new Flutter project.
+# Clinikk Task
 
-## Getting Started
+    1. Build a Simple To-Do App 
+    2. Showcase simple API integrations
+    3. Applying dark mode support
+    4. Use shared preferences for persisting the data across user sessions
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Install my-project
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+  git clone https://github.com/Antrimo/Clinikk-task.git
+  
+  cd Clinikk-task
+```
+    
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  flutter pub get
+  flutter run
+```
+
+
+## Packages
+
+    shared_preferences: ^2.3.5
+    http: ^1.2.2
+    lottie: ^3.2.0
+    provider: ^6.1.2
