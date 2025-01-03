@@ -10,6 +10,7 @@ class PostsScreen extends StatefulWidget {
 class _PostsScreenState extends State<PostsScreen> {
   List<dynamic> _posts = [];
   final TextEditingController _searchController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -18,56 +19,127 @@ class _PostsScreenState extends State<PostsScreen> {
   }
 
   Future<void> _fetchPosts({String? userId}) async {
-    final url = userId == null
+    setState(() {
+      _isLoading = true;
+    });
+
+    final url = userId == null || userId.isEmpty
         ? 'https://jsonplaceholder.typicode.com/posts'
         : 'https://jsonplaceholder.typicode.com/posts?userId=$userId';
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      setState(() {
-        _posts = jsonDecode(response.body);
-      });
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        setState(() {
+          _posts = jsonDecode(response.body);
+          _isLoading = false;
+        });
+      } else {
+        print('Failed to load data!');
+      }
+    } catch (e) { 
+      print(e);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Posts')),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    decoration:
-                        const InputDecoration(labelText: 'Filter by User ID'),
+                    decoration: InputDecoration(
+                      hintText: 'Filter by User ID',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                    ),
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.search),
+                const SizedBox(width: 10),
+                ElevatedButton(
                   onPressed: () {
                     _fetchPosts(userId: _searchController.text);
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: const Text('Search',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _posts.length,
-              itemBuilder: (context, index) {
-                final post = _posts[index];
-                return ListTile(
-                  title: Text(post['title']),
-                  subtitle: Text(post['body']),
-                );
-              },
-            ),
-          ),
+          _isLoading
+              ? const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : _posts.isEmpty
+                  ? const Expanded(
+                      child: Center(
+                        child: Text(
+                          'No posts available. Try searching!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: _posts.length,
+                        itemBuilder: (context, index) {
+                          final post = _posts[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 8.0,
+                            ),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              elevation: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      post['title'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      post['body'],
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
         ],
       ),
     );
