@@ -6,6 +6,12 @@
     3. Applying dark mode support
     4. Use shared preferences for persisting the data across user sessions
 
+## Working Video
+    
+    
+
+https://github.com/user-attachments/assets/b7307f5a-dea9-4490-800c-dcb715c7a3c1
+
 
 ## Installation
 
