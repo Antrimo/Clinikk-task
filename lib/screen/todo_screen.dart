@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task/utils/dialogBox.dart';
 import 'package:task/utils/todoTile.dart';
 
@@ -13,24 +16,48 @@ class TodoScreen extends StatefulWidget {
 class _TodoScreenState extends State<TodoScreen> {
   final List<Map<String, dynamic>> tasks = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  Future<void> _loadTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? tasksString = prefs.getString('tasks');
+    if (tasksString != null) {
+      setState(() {
+        tasks.addAll(List<Map<String, dynamic>>.from(jsonDecode(tasksString)));
+      });
+    }
+  }
+
+  Future<void> _saveTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('tasks', jsonEncode(tasks));
+  }
+
   void addNewTask(String taskTitle) {
     if (taskTitle.isNotEmpty) {
       setState(() {
         tasks.add({'title': taskTitle, 'completed': false});
       });
     }
+    _saveTasks();
   }
 
   void deleteTask(int index) {
     setState(() {
       tasks.removeAt(index);
     });
+    _saveTasks();
   }
 
   void taskCompletion(int index, bool value) {
     setState(() {
       tasks[index]['completed'] = value;
     });
+    _saveTasks();
   }
 
   void newTask() {

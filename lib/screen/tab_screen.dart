@@ -15,42 +15,45 @@ class TabScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Center(
-            child: Text(
-              "Task Manager",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-              ),
+          title: const Text(
+            "                   Task",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
             ),
           ),
           backgroundColor: Colors.green,
           bottom: const TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.list,color: Colors.white,)),
-              Tab(icon: Icon(Icons.cloud,color: Colors.white,)),
+              Tab(
+                  icon: Icon(
+                Icons.list,
+                color: Colors.white,
+              )),
+              Tab(
+                  icon: Icon(
+                Icons.cloud,
+                color: Colors.white,
+              )),
             ],
           ),
         ),
-
         body: TabBarView(
           children: [
             const TodoScreen(),
             PostsScreen(),
           ],
         ),
-
-
         drawer: Drawer(
           child: CupertinoSwitch(
-          value: Provider.of<ThemeProvider>(context).isDarkMode,
-          onChanged: (value) {
-          Provider.of<ThemeProvider>(context,listen: false).toggleTheme();
-          },
+            value: Provider.of<ThemeProvider>(context).isDarkMode,
+            onChanged: (value) {
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+            },
+          ),
         ),
       ),
-    ),
     );
   }
 }

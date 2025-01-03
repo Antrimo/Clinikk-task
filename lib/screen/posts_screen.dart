@@ -32,19 +32,24 @@ class _PostsScreenState extends State<PostsScreen> {
       if (response.statusCode == 200) {
         setState(() {
           _posts = jsonDecode(response.body);
-          _isLoading = false;
         });
       } else {
         print('Failed to load data!');
       }
-    } catch (e) { 
+    } catch (e) {
       print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       body: Column(
         children: [
@@ -57,6 +62,7 @@ class _PostsScreenState extends State<PostsScreen> {
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Filter by User ID',
+                      hintStyle: const TextStyle(color: Colors.black,),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -110,6 +116,10 @@ class _PostsScreenState extends State<PostsScreen> {
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
+                                side: BorderSide(
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                  width: 1.0,
+                                ),
                               ),
                               elevation: 3,
                               child: Padding(
